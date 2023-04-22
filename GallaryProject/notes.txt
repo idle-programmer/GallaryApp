@@ -1,0 +1,8 @@
+Set-ExecutionPolicy Unrestricted -Scope Process
+
+
+cd env/Scripts
+./activate
+
+py manage.py makemigrations GallaryApp
+py manage.py runserver
