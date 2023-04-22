@@ -7,7 +7,7 @@
       
         <form  (ngSubmit)="onSubmit()" enctype="multipart/form-data">
         <!-- <input type="text" formControlName="title"/> -->
-          <input type="file" name="file" [(ngModel)]="file" [ngModelOptions]="{standalone: true}" enctype="multipart/form-data" />
+          <input type="file" name="file" enctype="multipart/form-data" (change)="onChange($event)"/>
           <button type="submit">Upload Image File</button>
       
         </form>

@@ -50,4 +50,4 @@ class LoginSerializer(serializers.ModelSerializer):
 class MediaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Media
-        fields = ('mediaId','username','title','File','time')
+        fields = '__all__'

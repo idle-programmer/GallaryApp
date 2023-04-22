@@ -1,7 +1,8 @@
+from .models import Media
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import generics,status,views,permissions
+from rest_framework import generics,status,views,permissions,viewsets
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, permission_classes
@@ -9,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializer import MediaSerializer, RegisterSerializer, LoginSerializer
 from rest_framework.parsers import FileUploadParser,MultiPartParser, FormParser
 from rest_framework.views import APIView
+from .forms import File_form
 # Create your views here.
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
@@ -28,18 +30,21 @@ class LoginAPIView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
-@csrf_exempt
-def media(request):
-    if request.method == 'POST':
-        parser_classes = (MultiPartParser, FormParser,)
-        # file = request.FILES
-        print(request.FILES['File'])
-        # print(file)
-        return HttpResponse(request.FILES['File'])
-        # file_serializer = MediaSerializer(data=request.data)
 
-    #   if file_serializer.is_valid():
-    #       file_serializer.save()
-    #       return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-    #   else:
-    #       return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MediaUploadView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request, format=None):
+        serializer = MediaSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+    def get(self, request, format=None):
+        media = Media.objects.all()
+        serializer = MediaSerializer(media, many=True)
+        return Response(serializer.data)   

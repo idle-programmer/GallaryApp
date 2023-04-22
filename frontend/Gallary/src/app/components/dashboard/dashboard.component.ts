@@ -36,16 +36,17 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  // onChange(event:any) {
-  //   if (event.target.files.length > 0) {
-  //     const file = event.target.files[0];
-  //     // console.log(file)
-  //     // this.form.value.profile.setValue(event.target.files[0]);
-  //     this.form.setValue({
-  //       File:file
-  //     })
-  //   }
-  // }
+  onChange(event:any) {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      // console.log(file)
+      // this.form.value.profile.setValue(event.target.files[0]);
+      // this.form.setValue({
+      //   File:file
+      // })
+      this.file = file
+    }
+  }
 
   onSubmit() {
     // console.log(this.form)
@@ -68,11 +69,11 @@ export class DashboardComponent implements OnInit {
     // );
     if (this.file) {
       const formData = new FormData();
-      formData.append('file', this.file);
-      // formData.append('title',this.form.controls['title'].value)
-      // formData.append('username',this.username)
-      // formData.append('time',new Date().toISOString())
-      this.http.post('http://127.0.0.1:8000/media/', formData,httpOptions).subscribe((response: any) => {
+      formData.append('File',this.file);
+      formData.append('title',this.file.name)
+      formData.append('username',this.username)
+      formData.append('time',new Date().toISOString().substring(0, 10))
+      this.http.post('http://127.0.0.1:8000/media/', formData).subscribe((response: any) => {
         // if (response.status === 'success') {
         //   // this.refresh();
         // } else {
