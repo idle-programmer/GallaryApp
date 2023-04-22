@@ -34,4 +34,8 @@ export class HomeServiceService {
         })
       )
   }
+
+  public upload(formData: any) {
+    return this.http.post<any>(`${this.api_url}/media/`, formData);
+  }
 }

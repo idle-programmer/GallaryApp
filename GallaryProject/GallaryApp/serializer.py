@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import Media, User
 from django.contrib import auth
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
@@ -46,3 +46,8 @@ class LoginSerializer(serializers.ModelSerializer):
             'username': user.username,
             # 'tokens': user.tokens
         }
+    
+class MediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Media
+        fields = ('mediaId','username','title','File','time')

@@ -5,4 +5,5 @@ cd env/Scripts
 ./activate
 
 py manage.py makemigrations GallaryApp
+py manage.py migrate
 py manage.py runserver

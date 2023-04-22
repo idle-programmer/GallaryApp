@@ -1,1 +1,15 @@
 <p>dashboard works!</p>
+<div>
+    <div>
+        <div *ngIf="response && imageURL">
+          <img [src]='imageURL' />
+        </div>
+      
+        <form  (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+        <!-- <input type="text" formControlName="title"/> -->
+          <input type="file" name="file" [(ngModel)]="file" [ngModelOptions]="{standalone: true}" enctype="multipart/form-data" />
+          <button type="submit">Upload Image File</button>
+      
+        </form>
+      </div>
+</div>
