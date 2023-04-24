@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .serializer import MediaSerializer, RegisterSerializer, LoginSerializer
+from .serializer import LogoutSerializer, MediaSerializer, RegisterSerializer, LoginSerializer
 from rest_framework.parsers import FileUploadParser,MultiPartParser, FormParser
 from rest_framework.views import APIView
 from .forms import File_form
@@ -30,7 +30,15 @@ class LoginAPIView(generics.GenericAPIView):
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
 
-
+class LogoutAPIView(generics.GenericAPIView):
+    serializer_class = LogoutSerializer
+    # permission_classes = (permissions.IsAuthenticated,)
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        # return JsonResponse('done',safe=False)
 
 class MediaUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -48,3 +56,13 @@ class MediaUploadView(APIView):
         media = Media.objects.all()
         serializer = MediaSerializer(media, many=True)
         return Response(serializer.data)   
+    
+
+@csrf_exempt
+def deleteFile(self,request, format=None):
+    media = Media.objects.filter(mediaId=request)
+    if media:
+        media.delete()
+        return JsonResponse({"msg":"File Deleted"},safe=False)
+    else:
+        return JsonResponse({"msg":'File not found'},safe=False)

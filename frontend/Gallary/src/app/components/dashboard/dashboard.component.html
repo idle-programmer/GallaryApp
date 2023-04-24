@@ -1,15 +1,110 @@
-<p>dashboard works!</p>
+<!-- <p>dashboard works!</p>
 <div>
     <div>
         <div *ngIf="response && imageURL">
           <img [src]='imageURL' />
-        </div>
-      
+        </div>     
         <form  (ngSubmit)="onSubmit()" enctype="multipart/form-data">
-        <!-- <input type="text" formControlName="title"/> -->
           <input type="file" name="file" enctype="multipart/form-data" (change)="onChange($event)"/>
-          <button type="submit">Upload Image File</button>
-      
+          <button type="submit">Upload Image File</button>     
         </form>
       </div>
-</div>
+</div> -->
+
+
+<html>
+
+<head>
+	<title>Image Gallary</title>
+	<link rel="shortcut icon" href="../img/star.png" type="image/png">
+	<!-- Bootstrap CDN down below -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+	<!-- Navbar -->
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-nav-demo"
+					aria-expanded="false">
+					<span class="sr-only"> Toggle navigation </span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="#" class="navbar-brand"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+					IMGS</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-nav-demo">
+				<ul class="nav navbar-nav">
+					<li><a>{{username}}</a></li>
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+					<li><a><button (click)="logout()">LogOut</button></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<div class="container">
+		<div class="jumbotron">
+			<h1><i class="fa fa-camera-retro"></i> My Image Gallary</h1>
+			<div>
+				<div>
+					<div *ngIf="response && imageURL">
+						<img [src]='imageURL' />
+					</div>
+
+				</div>
+				<div class="form">
+					<div class="file-uploader__message-area">
+						<p>Select a file to upload</p>
+					</div>
+					<form class="file-uploader" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+						<!-- <input type="text" formControlName="title"/> -->
+						<input type="file" name="file" enctype="multipart/form-data" (change)="onChange($event)" />
+						<button type="submit" class="file-uploader__submit-button">Upload Image File</button>
+
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<table>
+				<div *ngFor="let item of fileArray">
+
+					<tr >
+						
+							<img *ngIf="item.type === 'image'" [src]="item.File" alt="{{ item.title }}"
+								class="col-lg-4 col-sm-12">
+
+							<video class="col-lg-4 col-sm-12" *ngIf="item.type === 'video'" [src]="item.File" controls>
+								Your browser does not support the video tag.
+							</video>
+							
+						
+
+					</tr>
+					<div>{{ item.title }}</div>
+							<button (click)="deleteFile(item.username,item.mediaId)">Delete</button>
+
+				</div>
+			</table>
+
+		</div>
+	</div>
+
+	<!-- JQuery CDN -->
+	<script src="http://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+		crossorigin="anonymous"></script>
+	<!-- JavaScript Bootstrap CDN -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>

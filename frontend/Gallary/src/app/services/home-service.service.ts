@@ -35,7 +35,21 @@ export class HomeServiceService {
       )
   }
 
+  logout(data:any){
+    return this.http.post<any>(this.api_url+'logout/',data,httpOptions).pipe(map(data=>{
+      return sessionStorage.clear()
+    }))
+  }
+
   public upload(formData: any) {
     return this.http.post<any>(`${this.api_url}/media/`, formData);
+  }
+
+  public getMedia(){
+    return this.http.get(this.api_url + '/media/');
+  }
+
+  public deleteMedia(mediaId:any){
+    return this.http.delete<any>(this.api_url+'del/media/'+String(mediaId))
   }
 }

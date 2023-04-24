@@ -67,19 +67,20 @@ export class HomeComponent {
     (data) => {
       console.log("logindata", data);
       if(data.username){
+        sessionStorage.setItem("data",data)
         sessionStorage.setItem("username",data.username);
         sessionStorage.setItem("token",JSON.stringify(data.tokens));
         this.router.navigate(['/dashboard']);
       }
     },
-  (error) => {
-    if (error.error.detail){
-      alert("Failed: " + error.error.detail)
-      location.reload();
-    }  
-  }
-  
-)
+    (error) => {
+      if (error.error.detail){
+        alert("Failed: " + error.error.detail)
+        location.reload();
+      }  
+    })
 }
+
+
   
 }

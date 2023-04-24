@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {  FormControl, FormGroup, Validators } from '@angular/forms';
 import { HomeServiceService } from 'src/app/services/home-service.service';
-import {  HttpHeaders,HttpErrorResponse } from '@angular/common/http';
+import {  HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-type': 'multipart/form-data; boundary=---------------------------1234567890'
@@ -25,48 +26,30 @@ export class DashboardComponent implements OnInit {
   imageURL: any;
   file!: File;
   username:any= sessionStorage.getItem('username')
-  // title!: string;
+  fileArray:any[] = [];
+
   
 
-  constructor(private formBuilder: FormBuilder, private uploadService: HomeServiceService,private http: HttpClient) { }
+  constructor(private uploadService: HomeServiceService,private http: HttpClient,private router: Router) {}
 
   ngOnInit() {
+    if(!sessionStorage['username']){
+      this.router.navigate(['/home'])
+    }
     this.form = new FormGroup({
       title:new FormControl("",[Validators.required])
     })
+    this.getfiles()
   }
 
   onChange(event:any) {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      // console.log(file)
-      // this.form.value.profile.setValue(event.target.files[0]);
-      // this.form.setValue({
-      //   File:file
-      // })
       this.file = file
     }
   }
 
   onSubmit() {
-    // console.log(this.form)
-    // const formdata= {
-    //   File : this.form.value.File,
-    //   title:this.form.value.title,
-    //   username : sessionStorage.getItem('username'),
-    //   time : new Date().toISOString()
-    // }
-    // this.uploadService.upload(formdata).subscribe(
-    //   (res) => {
-    //     this.response = res;
-    //     this.imageURL = `${this.api_url}${res.file}`;
-    //     console.log(res);
-    //     console.log(this.imageURL);
-    //   },
-    //   (err) => {  
-    //     console.log(err);
-    //   }
-    // );
     if (this.file) {
       const formData = new FormData();
       formData.append('File',this.file);
@@ -74,12 +57,68 @@ export class DashboardComponent implements OnInit {
       formData.append('username',this.username)
       formData.append('time',new Date().toISOString().substring(0, 10))
       this.http.post('http://127.0.0.1:8000/media/', formData).subscribe((response: any) => {
-        // if (response.status === 'success') {
-        //   // this.refresh();
-        // } else {
-        //   alert('Upload failed');
-        // }
+        if (response && response.mediaId) {
+          alert("File has been Successfully Added")
+          location.reload();
+        } 
+        else {
+          alert('Upload failed');
+        }
       });
     }
+  }
+
+  public getfiles(){
+    this.uploadService.getMedia().subscribe((data: any)=>{
+      // console.log("getfiles",data)
+      this.fileArray = data
+      this.fileArray.forEach(function(item){
+          let str = item['title']
+          let s1 = str.substring(str.length - 3, str.length)
+          // console.log(s1)
+          if (s1 == 'mp4'){
+            item['type'] = 'video'
+          }
+          else{
+            item['type'] = 'image'
+          }
+          let url = item['File']
+          item['File'] = 'http://127.0.0.1:8000' + url
+      })
+      // console.log(this.fileArray)
+    })
+  }
+
+  public deleteFile(username:any,mediaId:any){
+    if(username == sessionStorage['username']){
+      this.uploadService.deleteMedia(mediaId).subscribe((data:any)=>{
+        console.log(data)
+        if(data && data.msg=='File Deleted'){
+          alert(data.msg)
+          location.reload();
+        }
+        else{
+          alert(data.msg)
+          location.reload();
+        }
+      })
+    }
+    else{
+      alert("You cannot delete this file")
+      location.reload();
+    }
+    
+  }
+
+  logout():void{
+    this.uploadService.logout(sessionStorage.getItem('data')).subscribe(
+    (data:any)=>{
+      sessionStorage.clear()
+      this.router.navigate(['/home']);
+    },
+    (error) => {
+        sessionStorage.clear()
+        this.router.navigate(['/home']); 
+    })
   }
 }
