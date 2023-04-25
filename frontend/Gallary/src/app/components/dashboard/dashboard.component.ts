@@ -4,6 +4,8 @@ import {  FormControl, FormGroup, Validators } from '@angular/forms';
 import { HomeServiceService } from 'src/app/services/home-service.service';
 import {  HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import {MatDialog} from '@angular/material/dialog'
+import { ViewdetailsComponent } from '../viewdetails/viewdetails.component';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-type': 'multipart/form-data; boundary=---------------------------1234567890'
@@ -30,7 +32,7 @@ export class DashboardComponent implements OnInit {
 
   
 
-  constructor(private uploadService: HomeServiceService,private http: HttpClient,private router: Router) {}
+  constructor(private uploadService: HomeServiceService,private http: HttpClient,private router: Router,public dialog:MatDialog) {}
 
   ngOnInit() {
     if(!sessionStorage['username']){
@@ -104,7 +106,7 @@ export class DashboardComponent implements OnInit {
       })
     }
     else{
-      alert("You cannot delete this file")
+      alert("You cannot delete this file. Because you are not the owner of this file")
       location.reload();
     }
     
@@ -120,5 +122,13 @@ export class DashboardComponent implements OnInit {
         sessionStorage.clear()
         this.router.navigate(['/home']); 
     })
+  }
+
+  openView(data:any){
+    const dialogRef = this.dialog.open(ViewdetailsComponent,{
+      disableClose:true,
+      data:data
+
+    });
   }
 }

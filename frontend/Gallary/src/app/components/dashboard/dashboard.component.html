@@ -44,7 +44,7 @@
 					<li><a>{{username}}</a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a><button (click)="logout()">LogOut</button></a></li>
+					<li><a><button class="logout" (click)="logout()">LogOut</button></a></li>
 				</ul>
 			</div>
 		</div>
@@ -75,27 +75,33 @@
 
 		<div class="row">
 			<table>
-				<div *ngFor="let item of fileArray">
+				<div *ngFor=" let item of fileArray">
 
-					<tr >
-						
-							<img *ngIf="item.type === 'image'" [src]="item.File" alt="{{ item.title }}"
-								class="col-lg-4 col-sm-12">
+			<tr>
 
-							<video class="col-lg-4 col-sm-12" *ngIf="item.type === 'video'" [src]="item.File" controls>
-								Your browser does not support the video tag.
-							</video>
-							
-						
+				<img *ngIf="item.type === 'image'" [src]="item.File" alt="{{ item.title }}" class="col-lg-4 col-sm-12">
 
-					</tr>
-					<div>{{ item.title }}</div>
-							<button (click)="deleteFile(item.username,item.mediaId)">Delete</button>
+				<video class="col-lg-4 col-sm-12" *ngIf="item.type === 'video'" [src]="item.File" controls>
+					Your browser does not support the video tag.
+				</video>
 
-				</div>
-			</table>
+				<div>{{ item.title }}</div>
+				<button (click)="openView(item)">View Details</button>
+				&nbsp;
+				<button (click)="deleteFile(item.username,item.mediaId)">Delete</button>
+
+
+
+			</tr>
+			&nbsp;
+
+
 
 		</div>
+		</table>
+		
+
+	</div>
 	</div>
 
 	<!-- JQuery CDN -->
