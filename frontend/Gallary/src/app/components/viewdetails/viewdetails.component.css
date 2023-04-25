@@ -1,8 +1,9 @@
 table, th, td {
     border:1px solid black;
   }
-  .cancelClass{
+  .btn.btn-close{
     cursor: pointer;
     align-items: right;
+    align-self: right;
   }
   
